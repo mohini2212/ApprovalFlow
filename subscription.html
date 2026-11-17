@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription | Approval Flow</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            color: #263445;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 230px;
+            background: white;
+            padding: 25px 18px;
+            border-right: 1px solid #e5eaf1;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo {
+            color: #168BFA;
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #64748b;
+            padding: 13px 14px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #eaf4ff;
+            color: #168BFA;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 230px;
+            padding: 35px;
+            width: calc(100% - 230px);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .topbar h1 {
+            font-size: 27px;
+        }
+
+        .profile {
+            background: white;
+            padding: 10px 16px;
+            border-radius: 25px;
+            color: #64748b;
+        }
+
+        .intro {
+            text-align: center;
+            margin: 35px 0;
+        }
+
+        .intro h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        /* Billing Toggle */
+        .billing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0 35px;
+        }
+
+        .billing-toggle span {
+            font-weight: 600;
+        }
+
+        .switch {
+            width: 48px;
+            height: 25px;
+            background: #168BFA;
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .switch::after {
+            content: "";
+            position: absolute;
+            width: 19px;
+            height: 19px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: 0.3s;
+        }
+
+        .switch.yearly::after {
+            left: 26px;
+        }
+
+        .save {
+            color: #168BFA;
+            font-size: 12px;
+        }
+
+        /* Pricing Cards */
+        .plans {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .plan-card {
+            background: white;
+            border-radius: 15px;
+            padding: 28px 23px;
+            border: 1px solid #e5eaf1;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 30px rgba(22, 139, 250, 0.12);
+        }
+
+        .popular {
+            border: 2px solid #168BFA;
+        }
+
+        .badge {
+            position: absolute;
+            top: -13px;
+            right: 20px;
+            background: #168BFA;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .plan-card h3 {
+            font-size: 21px;
+            margin-bottom: 12px;
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 18px 0 5px;
+        }
+
+        .period {
+            color: #8492a6;
+            font-size: 13px;
+        }
+
+        .description {
+            color: #718096;
+            font-size: 13px;
+            margin: 15px 0 22px;
+            line-height: 1.5;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .features li {
+            margin: 13px 0;
+            color: #526174;
+            font-size: 14px;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: #168BFA;
+            font-weight: bold;
+            margin-right: 9px;
+        }
+
+        .plan-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #168BFA;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .plan-btn:hover {
+            background: #0874d8;
+        }
+
+        .free-btn {
+            background: #eaf4ff;
+            color: #168BFA;
+        }
+
+        .free-btn:hover {
+            background: #d8ebff;
+        }
+
+        /* Payment Section */
+        .payment-section {
+            background: white;
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 25px;
+            border-radius: 14px;
+            border: 1px solid #e5eaf1;
+        }
+
+        .payment-section h2 {
+            margin-bottom: 10px;
+        }
+
+        .payment-section p {
+            color: #718096;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .method {
+            background: #f4f7fc;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #526174;
+        }
+
+        .notice {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #8492a6;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: appear 0.3s ease;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 12px;
+        }
+
+        .modal-content p {
+            color: #718096;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .close-btn {
+            background: #168BFA;
+            color: white;
+            border: none;
+            padding: 11px 25px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .plans {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .plans {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">Approval Flow</div>
+
+        <a href="agency-dashboard.html">Dashboard</a>
+        <a href="upload.html">Upload Project</a>
+        <a href="approvals.html">Approvals</a>
+        <a href="clients.html">Clients</a>
+        <a href="subscription.html" class="active">Subscription</a>
+        <a href="settings.html">Settings</a>
+        <a href="login.html">Logout</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <div class="topbar">
+            <h1>Subscription Plans</h1>
+            <div class="profile">Welcome, User 👋</div>
+        </div>
+
+        <section class="intro">
+            <h2>Choose the Right Plan for You</h2>
+            <p>
+                Upgrade your Approval Flow experience and manage your projects
+                more efficiently.
+            </p>
+        </section>
+
+        <!-- Monthly / Yearly Toggle -->
+        <div class="billing-toggle">
+            <span>Monthly</span>
+
+            <div class="switch" id="billingSwitch"
+                 onclick="toggleBilling()"></div>
+
+            <span>Yearly</span>
+            <span class="save">Save more with yearly billing!</span>
+        </div>
+
+        <!-- Pricing Plans -->
+        <section class="plans">
+
+            <!-- Free Plan -->
+            <div class="plan-card">
+                <h3>Free Plan</h3>
+
+                <div class="price">₹0</div>
+                <div class="period">Forever</div>
+
+                <p class="description">
+                    Perfect for beginners and small projects.
+                </p>
+
+                <ul class="features">
+                    <li>Up to 3 active projects</li>
+                    <li>Basic approval system</li>
+                    <li>Limited client access</li>
+                    <li>Basic file uploads</li>
+                </ul>
+
+                <button class="plan-btn free-btn"
+                        onclick="selectPlan('Free')">
+                    Current Plan
+                </button>
+            </div>
+
+            <!-- Basic Plan -->
+            <div class="plan-card popular">
+                <span class="badge">POPULAR</span>
+
+                <h3>Basic Plan</h3>
+
+                <div class="price" id="basicPrice">₹499</div>
+                <div class="period" id="basicPeriod">per month</div>
+
+                <p class="description">
+                    Ideal for freelancers and growing teams.
+                </p>
+
+                <ul class="features">
+                    <li>Up to 20 active projects</li>
+                    <li>Unlimited approval requests</li>
+                    <li>More client access</li>
+                    <li>Priority support</li>
+                    <li>Increased file upload limit</li>
+                </ul>
+
+                <button class="plan-btn"
+                        onclick="selectPlan('Basic')">
+                    Choose Basic
+                </button>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="plan-card">
+                <h3>Premium Plan</h3>
+
+                <div class="price" id="premiumPrice">₹999</div>
+                <div class="period" id="premiumPeriod">per month</div>
+
+                <p class="description">
+                    For agencies managing multiple clients and projects.
+                </p>
+
+                <ul class="features">
+                    <li>Unlimited active projects</li>
+                    <li>Unlimited client access</li>
+                    <li>Advanced approval workflow</li>
+                    <li>Priority customer support</li>
+                    <li>Higher file upload limits</li>
+                </ul>
+
+                <button class="plan-btn"
+                        onclick="selectPlan('Premium')">
+                    Choose Premium
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Payment Section -->
+        <section class="payment-section">
+            <h2>Secure Payment Options</h2>
+
+            <p>
+                Choose a subscription plan and complete your payment through
+                a supported payment gateway.
+            </p>
+
+            <div class="payment-methods">
+                <div class="method">UPI</div>
+                <div class="method">Debit Card</div>
+                <div class="method">Credit Card</div>
+                <div class="method">Net Banking</div>
+            </div>
+
+            <p class="notice">
+                Payment gateway integration is required to process real
+                transactions. This page currently displays a demo interface.
+            </p>
+        </section>
+
+    </main>
+</div>
+
+<!-- Plan Selection Modal -->
+<div class="modal" id="planModal">
+    <div class="modal-content">
+
+        <h2 id="modalTitle">Plan Selected!</h2>
+
+        <p id="modalMessage">
+            Your selected plan details will appear here.
+        </p>
+
+        <button class="close-btn" onclick="closeModal()">
+            Continue
+        </button>
+
+    </div>
+</div>
+
+<script>
+
+    let yearlyBilling = false;
+
+    function toggleBilling() {
+
+        yearlyBilling = !yearlyBilling;
+
+        const switchButton = document.getElementById("billingSwitch");
+
+        switchButton.classList.toggle("yearly", yearlyBilling);
+
+        if (yearlyBilling) {
+
+            document.getElementById("basicPrice").innerText = "₹4,999";
+            document.getElementById("basicPeriod").innerText = "per year";
+
+            document.getElementById("premiumPrice").innerText = "₹9,999";
+            document.getElementById("premiumPeriod").innerText = "per year";
+
+        } else {
+
+            document.getElementById("basicPrice").innerText = "₹499";
+            document.getElementById("basicPeriod").innerText = "per month";
+
+            document.getElementById("premiumPrice").innerText = "₹999";
+            document.getElementById("premiumPeriod").innerText = "per month";
+
+        }
+    }
+
+    function selectPlan(plan) {
+
+        const modal = document.getElementById("planModal");
+        const title = document.getElementById("modalTitle");
+        const message = document.getElementById("modalMessage");
+
+        if (plan === "Free") {
+
+            title.innerText = "Free Plan";
+            message.innerText = "You are viewing the free plan. No payment is required.";
+
+        } else {
+
+            let price;
+
+            if (plan === "Basic") {
+                price = yearlyBilling ? "₹4,999/year" : "₹499/month";
+            } else {
+                price = yearlyBilling ? "₹9,999/year" : "₹999/month";
+            }
+
+            title.innerText = plan + " Plan Selected!";
+            message.innerText =
+                "You selected the " + plan +
+                " Plan for " + price +
+                ". A payment gateway will be connected here.";
+        }
+
+        modal.style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("planModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+
+        const modal = document.getElementById("planModal");
+
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+
+</script>
+
+</body>
+</html>

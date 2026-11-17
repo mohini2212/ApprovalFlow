@@ -1,0 +1,749 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | Approval Flow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faff;
+            color: #263445;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eaf0f6;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 23px;
+            font-weight: 700;
+            color: #168bfa;
+        }
+
+        .logo span {
+            color: #263445;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #68778a;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #168bfa;
+        }
+
+        .login-btn {
+            background: #168bfa;
+            color: white !important;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        /* HERO */
+
+        .hero {
+            text-align: center;
+            padding: 65px 20px 35px;
+        }
+
+        .hero .tag {
+            display: inline-block;
+            background: #eaf4ff;
+            color: #168bfa;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 37px;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 span {
+            color: #168bfa;
+        }
+
+        .hero p {
+            color: #8997a8;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* BILLING TOGGLE */
+
+        .billing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0 35px;
+        }
+
+        .billing-toggle span {
+            font-size: 13px;
+            color: #68778a;
+        }
+
+        .billing-toggle strong {
+            color: #263445;
+        }
+
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 25px;
+            display: inline-block;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #168bfa;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 19px;
+            height: 19px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+        .toggle input:checked + .slider:before {
+            transform: translateX(23px);
+        }
+
+        .save {
+            color: #269b5a;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* PRICING CARDS */
+
+        .pricing-container {
+            max-width: 1120px;
+            margin: auto;
+            padding: 0 20px 70px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .plan-card {
+            background: white;
+            border: 1px solid #e7edf5;
+            border-radius: 16px;
+            padding: 30px 25px;
+            transition: .3s;
+            position: relative;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(30, 60, 90, .08);
+        }
+
+        .plan-card.featured {
+            border: 2px solid #168bfa;
+            box-shadow: 0 10px 30px rgba(22, 139, 250, .09);
+        }
+
+        .popular {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #168bfa;
+            color: white;
+            padding: 7px 17px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .plan-card h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .plan-description {
+            color: #8997a8;
+            font-size: 12px;
+            line-height: 1.6;
+            min-height: 40px;
+        }
+
+        .price {
+            margin: 24px 0 8px;
+            font-size: 35px;
+            font-weight: 700;
+            color: #263445;
+        }
+
+        .price small {
+            font-size: 13px;
+            font-weight: 400;
+            color: #8997a8;
+        }
+
+        .billing-note {
+            color: #8997a8;
+            font-size: 11px;
+            margin-bottom: 22px;
+        }
+
+        .choose-btn {
+            display: block;
+            text-align: center;
+            width: 100%;
+            padding: 13px;
+            background: #eaf4ff;
+            color: #168bfa;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .choose-btn:hover {
+            background: #168bfa;
+            color: white;
+        }
+
+        .featured .choose-btn {
+            background: #168bfa;
+            color: white;
+        }
+
+        .featured .choose-btn:hover {
+            background: #0875dd;
+        }
+
+        .feature-heading {
+            font-size: 12px;
+            font-weight: 700;
+            margin: 25px 0 15px;
+        }
+
+        .features {
+            list-style: none;
+        }
+
+        .features li {
+            font-size: 12px;
+            color: #68778a;
+            margin-bottom: 14px;
+            display: flex;
+            gap: 9px;
+            line-height: 1.5;
+        }
+
+        .features li span {
+            color: #269b5a;
+            font-weight: 700;
+        }
+
+        /* COMPARISON */
+
+        .comparison {
+            background: white;
+            padding: 60px 20px;
+        }
+
+        .comparison h2 {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 26px;
+            margin-bottom: 30px;
+        }
+
+        .table-wrapper {
+            max-width: 900px;
+            margin: auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 550px;
+        }
+
+        th, td {
+            padding: 17px;
+            text-align: center;
+            border-bottom: 1px solid #edf1f6;
+            font-size: 13px;
+        }
+
+        th {
+            color: #168bfa;
+            background: #f7faff;
+        }
+
+        td:first-child {
+            text-align: left;
+            color: #68778a;
+        }
+
+        .yes {
+            color: #269b5a;
+            font-weight: 700;
+        }
+
+        /* FAQ */
+
+        .faq {
+            max-width: 800px;
+            margin: auto;
+            padding: 60px 20px;
+        }
+
+        .faq h2 {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 30px;
+        }
+
+        .faq-item {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 12px;
+        }
+
+        .faq-item h3 {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .faq-item p {
+            font-size: 12px;
+            color: #8997a8;
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #172b43;
+            color: white;
+            padding: 35px 7%;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 12px;
+            color: #b3c1d0;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 850px) {
+            .pricing-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .plan-card:last-child {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 14px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .pricing-container {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .plan-card:last-child {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav>
+        <div class="logo">Approval<span>Flow.</span></div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="login.html">Login</a>
+            <a href="signup.html" class="login-btn">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="tag">SIMPLE AND TRANSPARENT PRICING</div>
+
+        <h1>Choose the Right <span>Plan</span></h1>
+
+        <p>
+            Make content approvals easier with a plan that suits your business.
+            <br>
+            Start small and upgrade whenever you need.
+        </p>
+
+    </section>
+
+    <!-- BILLING TOGGLE -->
+
+    <div class="billing-toggle">
+
+        <span><strong>Monthly</strong></span>
+
+        <label class="toggle">
+            <input type="checkbox" id="billingToggle">
+            <span class="slider"></span>
+        </label>
+
+        <span>Yearly</span>
+        <span class="save">Save 20%</span>
+
+    </div>
+
+    <!-- PRICING PLANS -->
+
+    <section class="pricing-container">
+
+        <!-- BASIC -->
+
+        <div class="plan-card">
+
+            <h2>Basic</h2>
+
+            <p class="plan-description">
+                Perfect for individuals and small teams getting started.
+            </p>
+
+            <div class="price">
+                ₹<span class="amount" data-monthly="499" data-yearly="4790">499</span>
+                <small class="period">/month</small>
+            </div>
+
+            <p class="billing-note">Billed monthly</p>
+
+            <button class="choose-btn" onclick="selectPlan('Basic', 499)">
+                Choose Basic
+            </button>
+
+            <p class="feature-heading">What's included:</p>
+
+            <ul class="features">
+                <li><span>✓</span> Up to 2 team members</li>
+                <li><span>✓</span> 20 content approvals/month</li>
+                <li><span>✓</span> Basic dashboard</li>
+                <li><span>✓</span> Email support</li>
+                <li><span>✓</span> Content status tracking</li>
+            </ul>
+
+        </div>
+
+        <!-- PRO -->
+
+        <div class="plan-card featured">
+
+            <div class="popular">MOST POPULAR</div>
+
+            <h2>Pro</h2>
+
+            <p class="plan-description">
+                Best for growing agencies managing multiple clients.
+            </p>
+
+            <div class="price">
+                ₹<span class="amount" data-monthly="999" data-yearly="9590">999</span>
+                <small class="period">/month</small>
+            </div>
+
+            <p class="billing-note">Billed monthly</p>
+
+            <button class="choose-btn" onclick="selectPlan('Pro', 999)">
+                Choose Pro
+            </button>
+
+            <p class="feature-heading">Everything in Basic, plus:</p>
+
+            <ul class="features">
+                <li><span>✓</span> Up to 10 team members</li>
+                <li><span>✓</span> Unlimited content approvals</li>
+                <li><span>✓</span> Multiple client accounts</li>
+                <li><span>✓</span> Priority support</li>
+                <li><span>✓</span> Advanced dashboard</li>
+            </ul>
+
+        </div>
+
+        <!-- PREMIUM -->
+
+        <div class="plan-card">
+
+            <h2>Premium</h2>
+
+            <p class="plan-description">
+                For larger businesses that need more control.
+            </p>
+
+            <div class="price">
+                ₹<span class="amount" data-monthly="1999" data-yearly="19190">1999</span>
+                <small class="period">/month</small>
+            </div>
+
+            <p class="billing-note">Billed monthly</p>
+
+            <button class="choose-btn" onclick="selectPlan('Premium', 1999)">
+                Choose Premium
+            </button>
+
+            <p class="feature-heading">Everything in Pro, plus:</p>
+
+            <ul class="features">
+                <li><span>✓</span> Unlimited team members</li>
+                <li><span>✓</span> Unlimited clients</li>
+                <li><span>✓</span> Custom branding</li>
+                <li><span>✓</span> Dedicated support</li>
+                <li><span>✓</span> Advanced permissions</li>
+            </ul>
+
+        </div>
+
+    </section>
+
+    <!-- COMPARISON TABLE -->
+
+    <section class="comparison">
+
+        <h2>Compare Our Plans</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Features</th>
+                        <th>Basic</th>
+                        <th>Pro</th>
+                        <th>Premium</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Team Members</td>
+                        <td>2</td>
+                        <td>10</td>
+                        <td>Unlimited</td>
+                    </tr>
+
+                    <tr>
+                        <td>Content Approvals</td>
+                        <td>20/month</td>
+                        <td>Unlimited</td>
+                        <td>Unlimited</td>
+                    </tr>
+
+                    <tr>
+                        <td>Client Accounts</td>
+                        <td>1</td>
+                        <td>Multiple</td>
+                        <td>Unlimited</td>
+                    </tr>
+
+                    <tr>
+                        <td>Dashboard</td>
+                        <td>Basic</td>
+                        <td>Advanced</td>
+                        <td>Advanced</td>
+                    </tr>
+
+                    <tr>
+                        <td>Priority Support</td>
+                        <td>—</td>
+                        <td class="yes">✓</td>
+                        <td class="yes">✓</td>
+                    </tr>
+
+                    <tr>
+                        <td>Custom Branding</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <td class="yes">✓</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="faq">
+
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <h3>Can I upgrade my plan later?</h3>
+            <p>Yes. You can choose a higher plan whenever your business needs grow.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Can I cancel my subscription?</h3>
+            <p>You can manage your subscription according to the terms of your selected plan.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Are payments secure?</h3>
+            <p>Actual payment security depends on the payment gateway integrated into the application.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Can I try Approval Flow before subscribing?</h3>
+            <p>You can explore the available features and choose a plan that suits your requirements.</p>
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer>
+        <div class="logo">Approval Flow</div>
+        <p>Making content approvals simple, organised and faster.</p>
+        <p>© 2026 Approval Flow. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        let selectedBilling = "monthly";
+
+        const billingToggle = document.getElementById("billingToggle");
+
+        billingToggle.addEventListener("change", function() {
+
+            selectedBilling = this.checked ? "yearly" : "monthly";
+
+            document.querySelectorAll(".amount").forEach(amount => {
+
+                if (selectedBilling === "yearly") {
+                    amount.textContent = amount.dataset.yearly;
+                } else {
+                    amount.textContent = amount.dataset.monthly;
+                }
+
+            });
+
+            document.querySelectorAll(".period").forEach(period => {
+                period.textContent =
+                    selectedBilling === "yearly" ? "/year" : "/month";
+            });
+
+            document.querySelectorAll(".billing-note").forEach(note => {
+                note.textContent =
+                    selectedBilling === "yearly" ? "Billed annually" : "Billed monthly";
+            });
+
+        });
+
+        function selectPlan(plan, monthlyAmount) {
+
+            let amount = monthlyAmount;
+
+            if (selectedBilling === "yearly") {
+                amount = {
+                    Basic: 4790,
+                    Pro: 9590,
+                    Premium: 19190
+                }[plan];
+            }
+
+            localStorage.setItem("selectedPlan", plan);
+            localStorage.setItem("selectedAmount", amount);
+            localStorage.setItem("billingCycle", selectedBilling);
+
+            window.location.href = "payment.html";
+        }
+
+    </script>
+
+</body>
+</html>

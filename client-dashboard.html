@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Dashboard | ApprovalFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-page client-dashboard">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="index.html"><span class="brand-mark"><i class="fa-solid fa-layer-group"></i></span><span>Approval<span class="brand-accent">Flow</span></span></a>
+      <div class="workspace-label">CLIENT PORTAL</div>
+      <nav class="sidebar-nav" aria-label="Client navigation">
+        <button class="tab-btn active" data-tab="overview"><i class="fa-solid fa-house"></i><span>Overview</span></button>
+        <button class="tab-btn" data-tab="creatives"><i class="fa-regular fa-images"></i><span>My creatives</span></button>
+        <button class="tab-btn" data-tab="review"><i class="fa-regular fa-clock"></i><span>Review & approval</span><span class="nav-count" id="notificationCount">0</span></button>
+        <button class="tab-btn" data-tab="feedback"><i class="fa-regular fa-comments"></i><span>Feedback</span></button>
+      </nav>
+      <div class="workspace-label">ACCOUNT</div>
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="billing.html"><i class="fa-regular fa-credit-card"></i><span>Billing</span></a>
+        <button class="tab-btn" data-tab="settings"><i class="fa-solid fa-gear"></i><span>Settings</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-help"><div class="help-icon"><i class="fa-regular fa-circle-question"></i></div><div><strong>Need help?</strong><small>Contact your agency.</small></div></div>
+        <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="menuToggle" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
+        <div class="breadcrumb">Client portal <span>/</span> <strong>Dashboard</strong></div>
+        <div class="topbar-actions"><button class="icon-button" aria-label="Notifications"><i class="fa-regular fa-bell"></i><span class="notification-dot"></span></button><div class="topbar-user"><div class="avatar" id="clientAvatar">C</div><div><strong id="clientName">Client</strong><small>Client account</small></div></div></div>
+      </header>
+
+      <div class="page-content">
+        <section class="tab-panel active" id="overview">
+          <div class="page-heading"><div><p class="eyebrow">YOUR WORKSPACE</p><h1 id="welcomeMessage">Welcome back!</h1><p class="muted">Track your creative projects and review new submissions.</p></div><a class="btn btn-primary" href="review.html"><i class="fa-regular fa-eye"></i> Review content</a></div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span>Total creatives</span><span class="stat-icon blue"><i class="fa-regular fa-images"></i></span></div><strong id="totalCreatives">0</strong><small>Shared with you</small></article>
+            <article class="stat-card"><div class="stat-top"><span>Pending review</span><span class="stat-icon orange"><i class="fa-regular fa-clock"></i></span></div><strong id="pendingCreatives">0</strong><small>Waiting for your response</small></article>
+            <article class="stat-card"><div class="stat-top"><span>Approved</span><span class="stat-icon green"><i class="fa-solid fa-check"></i></span></div><strong id="approvedCreatives">0</strong><small>Approved content</small></article>
+            <article class="stat-card"><div class="stat-top"><span>Changes requested</span><span class="stat-icon purple"><i class="fa-solid fa-comment-dots"></i></span></div><strong id="changesCreatives">0</strong><small>Revision updates</small></article>
+          </div>
+          <div class="content-grid">
+            <article class="panel panel-wide"><div class="panel-heading"><div><h2>Recent creatives</h2><p class="muted">Content shared by your agency</p></div><button class="text-button" data-open-tab="creatives">View all <i class="fa-solid fa-arrow-right"></i></button></div><div id="clientCreativeList" class="creative-list"><p class="empty-message">Your creatives will appear here.</p></div></article>
+            <article class="panel"><div class="panel-heading"><div><h2>Recent activity</h2><p class="muted">Your latest project updates</p></div></div><div id="recentActivity" class="activity-list"><p class="empty-message">No recent activity available.</p></div></article>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="creatives">
+          <div class="page-heading"><div><p class="eyebrow">YOUR CONTENT</p><h1>My creatives</h1><p class="muted">Find the files your agency has shared with you.</p></div></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Creative library</h2><p class="muted">Search and review your shared work below.</p></div><input class="search-input" id="clientSearch" type="search" placeholder="Search creatives..."></div><div id="clientCreativeLibrary" class="creative-list"><p class="empty-message">Your creatives will appear here.</p></div></div>
+        </section>
+
+        <section class="tab-panel" id="review">
+          <div class="page-heading"><div><p class="eyebrow">YOUR ACTION</p><h1>Review & approval</h1><p class="muted">Approve submitted work or request changes from your agency.</p></div><a class="btn btn-primary" href="review.html">Open review page</a></div>
+          <div class="panel"><div class="empty-state"><i class="fa-regular fa-circle-check"></i><h3>Review your submissions</h3><p>Open the review page to see submitted creatives and use the available approval and feedback actions.</p><a class="btn btn-primary" href="review.html">Go to review</a></div></div>
+        </section>
+
+        <section class="tab-panel" id="feedback">
+          <div class="page-heading"><div><p class="eyebrow">COMMUNICATION</p><h1>Feedback</h1><p class="muted">See feedback and revision notes attached to your creatives.</p></div></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Feedback and comments</h2><p class="muted">Feedback saved against your creative submissions.</p></div></div><div id="clientFeedbackList" class="activity-list"><p class="empty-message">Feedback will appear here when available.</p></div></div>
+        </section>
+
+        <section class="tab-panel" id="settings">
+          <div class="page-heading"><div><p class="eyebrow">ACCOUNT</p><h1>Profile settings</h1><p class="muted">Your client account information.</p></div></div>
+          <div class="panel settings-panel"><div class="profile-large"><div class="avatar avatar-large" id="settingsAvatar">C</div><div><h2 id="settingsName">Client</h2><p class="muted" id="clientEmail">client@example.com</p></div></div><div class="settings-row"><span>Account type</span><strong>Client</strong></div><div class="settings-row"><span>Portal</span><strong>ApprovalFlow</strong></div><a class="btn btn-light" href="setting.html">Open account settings</a></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script src="js/dashboard.js"></script>
+  <script src="js/client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard-tabs.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const source = document.getElementById("clientCreativeList");
+      const target = document.getElementById("clientCreativeLibrary");
+      if (source && target) {
+        const observer = new MutationObserver(() => { target.innerHTML = source.innerHTML; });
+        observer.observe(source, { childList: true, subtree: true });
+        target.innerHTML = source.innerHTML;
+      }
+      const feedback = document.getElementById("clientFeedbackList");
+      const creatives = JSON.parse(localStorage.getItem("creatives") || "[]");
+      const user = JSON.parse(sessionStorage.getItem("currentUser") || "null");
+      if (feedback && user) {
+        const own = creatives.filter(c => c.clientEmail === user.email || c.client === user.name).filter(c => c.feedback);
+        feedback.innerHTML = own.length ? own.map(c => `<div class="activity-item"><strong>${String(c.name || "Creative").replace(/[&<>"']/g, "")}</strong><p>${String(c.feedback).replace(/[&<>"']/g, "")}</p></div>`).join("") : '<p class="empty-message">No feedback available yet.</p>';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agency Dashboard | ApprovalFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-page agency-dashboard">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="index.html"><span class="brand-mark"><i class="fa-solid fa-layer-group"></i></span><span>Approval<span class="brand-accent">Flow</span></span></a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="sidebar-nav" aria-label="Agency navigation">
+        <button class="tab-btn active" data-tab="overview"><i class="fa-solid fa-house"></i><span>Overview</span></button>
+        <button class="tab-btn" data-tab="creatives"><i class="fa-regular fa-images"></i><span>All Creatives</span></button>
+        <button class="tab-btn" data-tab="pending"><i class="fa-regular fa-clock"></i><span>Pending Approvals</span><span class="nav-count" id="notificationCount">0</span></button>
+        <button class="tab-btn" data-tab="approved"><i class="fa-regular fa-circle-check"></i><span>Approved Work</span></button>
+        <button class="tab-btn" data-tab="clients"><i class="fa-solid fa-users"></i><span>Clients</span></button>
+      </nav>
+      <div class="workspace-label">ACCOUNT</div>
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="subscription.html"><i class="fa-solid fa-gem"></i><span>Subscription</span></a>
+        <a class="nav-link" href="billing.html"><i class="fa-regular fa-credit-card"></i><span>Billing</span></a>
+        <button class="tab-btn" data-tab="settings"><i class="fa-solid fa-gear"></i><span>Settings</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-help"><div class="help-icon"><i class="fa-regular fa-circle-question"></i></div><div><strong>Need help?</strong><small>We're here for you.</small></div></div>
+        <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="menuToggle" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong>Agency dashboard</strong></div>
+        <div class="topbar-actions">
+          <button class="icon-button" aria-label="Notifications"><i class="fa-regular fa-bell"></i><span class="notification-dot"></span></button>
+          <div class="topbar-user"><div class="avatar" id="userAvatar">A</div><div><strong id="userName">Agency User</strong><small id="userRole">Agency</small></div></div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <section class="tab-panel active" id="overview">
+          <div class="page-heading"><div><p class="eyebrow">AGENCY WORKSPACE</p><h1 id="dashboardWelcome">Welcome back!</h1><p class="muted">Here's what's happening with your creative approvals.</p></div><a class="btn btn-primary" href="upload.html"><i class="fa-solid fa-plus"></i> Upload creative</a></div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span>Total creatives</span><span class="stat-icon blue"><i class="fa-regular fa-images"></i></span></div><strong id="totalCreatives">0</strong><small>Across your workspace</small></article>
+            <article class="stat-card"><div class="stat-top"><span>Pending review</span><span class="stat-icon orange"><i class="fa-regular fa-clock"></i></span></div><strong id="pendingCreatives">0</strong><small>Waiting for client feedback</small></article>
+            <article class="stat-card"><div class="stat-top"><span>Approved</span><span class="stat-icon green"><i class="fa-solid fa-check"></i></span></div><strong id="approvedCreatives">0</strong><small>Ready to move forward</small></article>
+            <article class="stat-card"><div class="stat-top"><span>Changes requested</span><span class="stat-icon purple"><i class="fa-solid fa-comment-dots"></i></span></div><strong id="changesCreatives">0</strong><small>Needs another revision</small></article>
+          </div>
+          <div class="content-grid">
+            <article class="panel panel-wide"><div class="panel-heading"><div><h2>Recent creatives</h2><p class="muted">Latest work added to your workspace</p></div><button class="text-button" data-open-tab="creatives">View all <i class="fa-solid fa-arrow-right"></i></button></div><div id="recentCreatives" class="item-list"><p class="empty-message">No creatives uploaded yet.</p></div></article>
+            <article class="panel"><div class="panel-heading"><div><h2>Recent activity</h2><p class="muted">Latest approval updates</p></div></div><div id="recentActivity" class="activity-list"><p class="empty-message">No recent activities available.</p></div></article>
+          </div>
+          <div class="quick-actions"><a href="upload.html"><i class="fa-solid fa-cloud-arrow-up"></i><span><strong>Upload new creative</strong><small>Send a new file for review</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a><a href="clients.html"><i class="fa-solid fa-user-plus"></i><span><strong>Manage clients</strong><small>View your client list</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+        </section>
+
+        <section class="tab-panel" id="creatives">
+          <div class="page-heading"><div><p class="eyebrow">CONTENT LIBRARY</p><h1>All creatives</h1><p class="muted">Review the status of the work in your workspace.</p></div><a class="btn btn-primary" href="upload.html"><i class="fa-solid fa-plus"></i> Upload creative</a></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Creative workspace</h2><p class="muted">Your latest uploaded creatives appear on the overview.</p></div><a class="btn btn-light" href="approvals.html">Open approvals</a></div><div id="creativeWorkspace" class="empty-state"><i class="fa-regular fa-images"></i><h3>Manage your creatives</h3><p>Use Upload Creative to add work, or open approvals to manage submitted items.</p><a class="btn btn-primary" href="upload.html">Go to upload</a></div></div>
+        </section>
+
+        <section class="tab-panel" id="pending">
+          <div class="page-heading"><div><p class="eyebrow">ACTION REQUIRED</p><h1>Pending approvals</h1><p class="muted">Creative work waiting for a client's decision.</p></div></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Approval queue</h2><p class="muted">Open the approvals page to review and track submissions.</p></div><a class="btn btn-primary" href="approvals.html">Manage approvals</a></div><div class="empty-state"><i class="fa-regular fa-clock"></i><h3>Approval queue</h3><p>Use the approvals workspace to see pending items and their current status.</p></div></div>
+        </section>
+
+        <section class="tab-panel" id="approved">
+          <div class="page-heading"><div><p class="eyebrow">COMPLETED WORK</p><h1>Approved work</h1><p class="muted">A quick place to access approved creative content.</p></div></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Approved content</h2><p class="muted">Your approved work is tracked with the creative status.</p></div><a class="btn btn-light" href="approvals.html">View all approvals</a></div><div id="approvedWorkList" class="empty-state"><i class="fa-solid fa-circle-check"></i><h3>Approved content</h3><p>Approved creatives will be reflected in your creative and approvals records.</p></div></div>
+        </section>
+
+        <section class="tab-panel" id="clients">
+          <div class="page-heading"><div><p class="eyebrow">RELATIONSHIPS</p><h1>Clients</h1><p class="muted">Keep track of the clients connected to your agency.</p></div><a class="btn btn-primary" href="clients.html"><i class="fa-solid fa-users"></i> Manage clients</a></div>
+          <div class="panel"><div class="panel-heading"><div><h2>Your clients</h2><p class="muted">Client information saved in your workspace</p></div></div><div id="clientList" class="client-list"><p class="empty-message">No clients added yet.</p></div></div>
+        </section>
+
+        <section class="tab-panel" id="settings">
+          <div class="page-heading"><div><p class="eyebrow">PREFERENCES</p><h1>Settings</h1><p class="muted">Your account information and workspace preferences.</p></div></div>
+          <div class="panel settings-panel"><div class="profile-large"><div class="avatar avatar-large" id="settingsAvatar">A</div><div><h2 id="settingsName">Agency User</h2><p class="muted" id="userEmail">user@example.com</p></div></div><div class="settings-row"><span>Account type</span><strong id="settingsRole">Agency</strong></div><div class="settings-row"><span>Workspace</span><strong>ApprovalFlow</strong></div><a class="btn btn-light" href="setting.html">Open account settings</a></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script src="js/dashboard.js"></script>
+  <script src="js/agency.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard-tabs.js"></script>
+</body>
+</html>

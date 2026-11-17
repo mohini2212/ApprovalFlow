@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Review | Approval Flow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f8fc;
+            color: #263445;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 245px;
+            background: white;
+            border-right: 1px solid #e8edf4;
+            padding: 28px 18px;
+            position: fixed;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 23px;
+            font-weight: 700;
+            color: #168bfa;
+            padding: 0 12px;
+            margin-bottom: 38px;
+        }
+
+        .logo span {
+            color: #263445;
+        }
+
+        .menu-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #9aa8b8;
+            letter-spacing: 1px;
+            padding: 0 12px;
+            margin-bottom: 14px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #68778a;
+            padding: 13px 14px;
+            border-radius: 9px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: #eaf4ff;
+            color: #168bfa;
+        }
+
+        .nav-links a.active {
+            font-weight: 700;
+        }
+
+        .logout {
+            margin-top: auto;
+            text-decoration: none;
+            color: #e05b5b;
+            padding: 13px 14px;
+            font-size: 14px;
+        }
+
+        /* MAIN CONTENT */
+
+        .main-content {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+            padding: 30px 38px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+        }
+
+        .topbar p {
+            color: #8a98a9;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #168bfa;
+            background: white;
+            border: 1px solid #e3edf8;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* FILTERS */
+
+        .filter-section {
+            background: white;
+            border: 1px solid #eaf0f6;
+            padding: 18px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            border: 1px solid #e6edf5;
+            background: white;
+            padding: 9px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #68778a;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #eaf4ff;
+            color: #168bfa;
+            border-color: #cce4ff;
+        }
+
+        .search-box {
+            padding: 10px 13px;
+            border: 1px solid #e6edf5;
+            border-radius: 7px;
+            outline: none;
+            font-size: 12px;
+            width: 210px;
+        }
+
+        .search-box:focus {
+            border-color: #168bfa;
+        }
+
+        /* CONTENT CARDS */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .content-card {
+            background: white;
+            border: 1px solid #eaf0f6;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(30, 60, 90, 0.07);
+        }
+
+        .preview {
+            height: 190px;
+            background: #eaf4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+            color: #168bfa;
+        }
+
+        .preview img,
+        .preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .card-top h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .pending {
+            background: #fff4df;
+            color: #d58a21;
+        }
+
+        .approved {
+            background: #e8f8ef;
+            color: #269b5a;
+        }
+
+        .changes {
+            background: #fff0f0;
+            color: #d45a5a;
+        }
+
+        .card-info {
+            font-size: 12px;
+            color: #8997a8;
+            line-height: 1.9;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            font-size: 13px;
+            color: #68778a;
+            line-height: 1.6;
+            margin-bottom: 17px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .approve-btn {
+            background: #e8f8ef;
+            color: #269b5a;
+        }
+
+        .approve-btn:hover {
+            background: #269b5a;
+            color: white;
+        }
+
+        .change-btn {
+            background: #fff0f0;
+            color: #d45a5a;
+        }
+
+        .change-btn:hover {
+            background: #d45a5a;
+            color: white;
+        }
+
+        .disabled-btn {
+            background: #f0f3f7;
+            color: #98a4b3;
+            cursor: not-allowed;
+        }
+
+        .empty-message {
+            display: none;
+            background: white;
+            padding: 35px;
+            text-align: center;
+            color: #8997a8;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        footer {
+            text-align: center;
+            color: #9aa8b8;
+            font-size: 12px;
+            padding: 30px 0 10px;
+        }
+
+        /* FEEDBACK MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 35, 55, 0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 430px;
+            padding: 25px;
+            border-radius: 14px;
+        }
+
+        .modal-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p {
+            font-size: 13px;
+            color: #8997a8;
+            margin-bottom: 17px;
+        }
+
+        .modal-content textarea {
+            width: 100%;
+            min-height: 120px;
+            border: 1px solid #e3eaf2;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 13px;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        .modal-content textarea:focus {
+            border-color: #168bfa;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .cancel-btn {
+            background: #f0f3f7;
+            color: #68778a;
+        }
+
+        .submit-btn {
+            background: #168bfa;
+            color: white;
+        }
+
+        @media (max-width: 950px) {
+            .sidebar {
+                width: 205px;
+            }
+
+            .main-content {
+                margin-left: 205px;
+                width: calc(100% - 205px);
+                padding: 25px 20px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+
+            .menu-label {
+                display: none;
+            }
+
+            .nav-links {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .nav-links a {
+                padding: 9px;
+                font-size: 12px;
+            }
+
+            .logout {
+                display: block;
+                margin-top: 10px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px 15px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .filter-section {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">Approval<span>Flow.</span></div>
+
+        <p class="menu-label">CLIENT PORTAL</p>
+
+        <nav class="nav-links">
+            <a href="client-dashboard.html">▦ Dashboard</a>
+            <a href="review.html" class="active">◷ Pending Review</a>
+            <a href="review.html">✓ Approved Content</a>
+            <a href="review.html">↻ Changes Requested</a>
+            <a href="client-dashboard.html#notifications">♧ Notifications</a>
+            <a href="client-dashboard.html#profile">♙ Profile</a>
+        </nav>
+
+        <a href="login.html" class="logout">↪ Logout</a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Content Review</h1>
+                <p>Review creative submissions and share your decisions.</p>
+            </div>
+
+            <a href="client-dashboard.html" class="back-btn">
+                ← Dashboard
+            </a>
+        </header>
+
+
+        <!-- FILTERS -->
+
+        <section class="filter-section">
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterContent('all', this)">All</button>
+                <button class="filter-btn" onclick="filterContent('pending', this)">Pending</button>
+                <button class="filter-btn" onclick="filterContent('approved', this)">Approved</button>
+                <button class="filter-btn" onclick="filterContent('changes', this)">Changes Requested</button>
+            </div>
+
+            <input
+                type="text"
+                class="search-box"
+                id="searchInput"
+                placeholder="Search content..."
+                oninput="searchContent()"
+            >
+
+        </section>
+
+
+        <!-- CONTENT GRID -->
+
+        <section class="content-grid" id="contentGrid">
+
+
+            <!-- CARD 1 -->
+
+            <div class="content-card" data-status="pending" data-name="instagram post 01 winter sale">
+
+                <div class="preview">📸</div>
+
+                <div class="card-body">
+
+                    <div class="card-top">
+                        <h3>Instagram Post 01</h3>
+                        <span class="status pending">Pending</span>
+                    </div>
+
+                    <div class="card-info">
+                        Campaign: Winter Sale<br>
+                        Submitted: 15 November 2026<br>
+                        File: instagram-post.jpg
+                    </div>
+
+                    <p class="description">
+                        Promotional creative for the upcoming winter sale campaign.
+                        Please review the design and text.
+                    </p>
+
+                    <div class="card-actions">
+                        <button class="btn approve-btn" onclick="approveContent(this)">
+                            ✓ Approve
+                        </button>
+
+                        <button class="btn change-btn" onclick="requestChanges(this)">
+                            ↻ Request Changes
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CARD 2 -->
+
+            <div class="content-card" data-status="approved" data-name="facebook banner brand awareness">
+
+                <div class="preview">🖼️</div>
+
+                <div class="card-body">
+
+                    <div class="card-top">
+                        <h3>Facebook Banner</h3>
+                        <span class="status approved">Approved</span>
+                    </div>
+
+                    <div class="card-info">
+                        Campaign: Brand Awareness<br>
+                        Submitted: 14 November 2026<br>
+                        File: facebook-banner.jpg
+                    </div>
+
+                    <p class="description">
+                        Brand awareness banner designed for the official Facebook page.
+                    </p>
+
+                    <div class="card-actions">
+                        <button class="btn disabled-btn" disabled>
+                            Already Approved
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CARD 3 -->
+
+            <div class="content-card" data-status="changes" data-name="promotional reel winter sale">
+
+                <div class="preview">🎬</div>
+
+                <div class="card-body">
+
+                    <div class="card-top">
+                        <h3>Promotional Reel</h3>
+                        <span class="status changes">Changes Requested</span>
+                    </div>
+
+                    <div class="card-info">
+                        Campaign: Winter Sale<br>
+                        Submitted: 13 November 2026<br>
+                        File: promotional-reel.mp4
+                    </div>
+
+                    <p class="description">
+                        Feedback was previously submitted for this promotional reel.
+                        Waiting for the agency's revised version.
+                    </p>
+
+                    <div class="card-actions">
+                        <button class="btn disabled-btn" disabled>
+                            Awaiting Revision
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CARD 4 -->
+
+            <div class="content-card" data-status="pending" data-name="product story new launch">
+
+                <div class="preview">📱</div>
+
+                <div class="card-body">
+
+                    <div class="card-top">
+                        <h3>Product Story</h3>
+                        <span class="status pending">Pending</span>
+                    </div>
+
+                    <div class="card-info">
+                        Campaign: New Launch<br>
+                        Submitted: 12 November 2026<br>
+                        File: product-story.jpg
+                    </div>
+
+                    <p class="description">
+                        A social media story creative for the upcoming product launch.
+                    </p>
+
+                    <div class="card-actions">
+                        <button class="btn approve-btn" onclick="approveContent(this)">
+                            ✓ Approve
+                        </button>
+
+                        <button class="btn change-btn" onclick="requestChanges(this)">
+                            ↻ Request Changes
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <div class="empty-message" id="emptyMessage">
+            No matching content found.
+        </div>
+
+
+        <footer>
+            © 2026 Approval Flow. All Rights Reserved.
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- REQUEST CHANGES MODAL -->
+
+<div class="modal" id="feedbackModal">
+
+    <div class="modal-content">
+
+        <h2>Request Changes</h2>
+
+        <p>
+            Explain what needs to be changed so the agency can revise the creative.
+        </p>
+
+        <textarea
+            id="feedbackText"
+            placeholder="Write your feedback here..."
+        ></textarea>
+
+        <div class="modal-actions">
+
+            <button class="btn cancel-btn" onclick="closeModal()">
+                Cancel
+            </button>
+
+            <button class="btn submit-btn" onclick="submitFeedback()">
+                Submit Feedback
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let selectedCard = null;
+    let currentFilter = "all";
+
+
+    // APPROVE CONTENT
+
+    function approveContent(button) {
+
+        const card = button.closest(".content-card");
+
+        const confirmApproval = confirm(
+            "Are you sure you want to approve this content?"
+        );
+
+        if (!confirmApproval) return;
+
+        updateCardStatus(card, "approved", "Approved");
+
+        card.querySelector(".description").textContent =
+            "You have approved this creative.";
+
+        card.querySelector(".card-actions").innerHTML =
+            '<button class="btn disabled-btn" disabled>Already Approved</button>';
+
+        saveContentStatus(card);
+
+        alert("Content approved successfully!");
+    }
+
+
+    // OPEN FEEDBACK MODAL
+
+    function requestChanges(button) {
+
+        selectedCard = button.closest(".content-card");
+
+        document.getElementById("feedbackText").value = "";
+
+        document.getElementById("feedbackModal").style.display = "flex";
+    }
+
+
+    // CLOSE MODAL
+
+    function closeModal() {
+
+        document.getElementById("feedbackModal").style.display = "none";
+
+        selectedCard = null;
+    }
+
+
+    // SUBMIT FEEDBACK
+
+    function submitFeedback() {
+
+        const feedback = document.getElementById("feedbackText").value.trim();
+
+        if (feedback === "") {
+            alert("Please enter your feedback first.");
+            return;
+        }
+
+        if (!selectedCard) return;
+
+        updateCardStatus(selectedCard, "changes", "Changes Requested");
+
+        selectedCard.querySelector(".description").textContent =
+            "Your feedback: " + feedback;
+
+        selectedCard.querySelector(".card-actions").innerHTML =
+            '<button class="btn disabled-btn" disabled>Changes Requested</button>';
+
+        saveContentStatus(selectedCard);
+
+        closeModal();
+
+        alert("Your change request has been submitted!");
+    }
+
+
+    // UPDATE STATUS
+
+    function updateCardStatus(card, status, label) {
+
+        card.dataset.status = status;
+
+        const statusElement = card.querySelector(".status");
+
+        statusElement.className = "status " + status;
+
+        statusElement.textContent = label;
+    }
+
+
+    // SAVE STATUS IN LOCAL STORAGE
+
+    function saveContentStatus(card) {
+
+        const contentName = card.querySelector("h3").textContent;
+
+        const status = card.dataset.status;
+
+        const description = card.querySelector(".description").textContent;
+
+        const allUpdates = JSON.parse(
+            localStorage.getItem("contentUpdates") || "{}"
+        );
+
+        allUpdates[contentName] = {
+            status: status,
+            description: description,
+            updatedAt: new Date().toLocaleString()
+        };
+
+        localStorage.setItem("contentUpdates", JSON.stringify(allUpdates));
+    }
+
+
+    // LOAD SAVED STATUS
+
+    function loadContentStatus() {
+
+        const allUpdates = JSON.parse(
+            localStorage.getItem("contentUpdates") || "{}"
+        );
+
+        document.querySelectorAll(".content-card").forEach(card => {
+
+            const contentName = card.querySelector("h3").textContent;
+
+            const saved = allUpdates[contentName];
+
+            if (!saved) return;
+
+            updateCardStatus(card, saved.status,
+                saved.status === "changes" ? "Changes Requested" :
+                saved.status === "approved" ? "Approved" : "Pending"
+            );
+
+            card.querySelector(".description").textContent = saved.description;
+
+            if (saved.status === "approved") {
+
+                card.querySelector(".card-actions").innerHTML =
+                    '<button class="btn disabled-btn" disabled>Already Approved</button>';
+
+            } else if (saved.status === "changes") {
+
+                card.querySelector(".card-actions").innerHTML =
+                    '<button class="btn disabled-btn" disabled>Changes Requested</button>';
+            }
+
+        });
+
+    }
+
+
+    // FILTER CONTENT
+
+    function filterContent(status, button) {
+
+        currentFilter = status;
+
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        applyFilters();
+    }
+
+
+    // SEARCH CONTENT
+
+    function searchContent() {
+
+        applyFilters();
+    }
+
+
+    // APPLY FILTER AND SEARCH
+
+    function applyFilters() {
+
+        const searchValue = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+
+        let visibleCount = 0;
+
+        document.querySelectorAll(".content-card").forEach(card => {
+
+            const status = card.dataset.status;
+
+            const name = card.dataset.name;
+
+            const matchesStatus =
+                currentFilter === "all" || status === currentFilter;
+
+            const matchesSearch = name.includes(searchValue);
+
+            if (matchesStatus && matchesSearch) {
+
+                card.style.display = "block";
+
+                visibleCount++;
+
+            } else {
+
+                card.style.display = "none";
+            }
+
+        });
+
+        document.getElementById("emptyMessage").style.display =
+            visibleCount === 0 ? "block" : "none";
+    }
+
+
+    // INITIALIZE PAGE
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        loadContentStatus();
+
+        applyFilters();
+
+    });
+
+</script>
+
+</body>
+</html>

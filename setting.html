@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Approval Flow</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            color: #263445;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 230px;
+            background: white;
+            padding: 25px 18px;
+            border-right: 1px solid #e5eaf1;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo {
+            color: #168BFA;
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #64748b;
+            padding: 13px 14px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #eaf4ff;
+            color: #168BFA;
+        }
+
+        /* Main */
+        .main {
+            margin-left: 230px;
+            padding: 35px;
+            width: calc(100% - 230px);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .topbar h1 {
+            font-size: 27px;
+        }
+
+        .profile {
+            background: white;
+            padding: 10px 16px;
+            border-radius: 25px;
+            color: #64748b;
+        }
+
+        .intro {
+            margin-bottom: 25px;
+        }
+
+        .intro p {
+            color: #718096;
+            margin-top: 8px;
+        }
+
+        /* Settings Cards */
+        .settings-card {
+            background: white;
+            padding: 27px;
+            border-radius: 13px;
+            border: 1px solid #e5eaf1;
+            margin-bottom: 22px;
+            max-width: 900px;
+        }
+
+        .settings-card h2 {
+            font-size: 19px;
+            margin-bottom: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #526174;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dce3ec;
+            border-radius: 7px;
+            outline: none;
+            font-size: 14px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #168BFA;
+        }
+
+        /* Toggle Rows */
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #edf0f5;
+            gap: 15px;
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-row p {
+            color: #718096;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .toggle {
+            width: 44px;
+            height: 23px;
+            appearance: none;
+            background: #cbd5e1;
+            border-radius: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+
+        .toggle::before {
+            content: "";
+            position: absolute;
+            width: 17px;
+            height: 17px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: 0.3s;
+        }
+
+        .toggle:checked {
+            background: #168BFA;
+        }
+
+        .toggle:checked::before {
+            left: 24px;
+        }
+
+        /* Buttons */
+        .save-btn {
+            background: #168BFA;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .save-btn:hover {
+            background: #0874d8;
+        }
+
+        .danger-btn {
+            background: #fff0f0;
+            color: #e05252;
+            border: 1px solid #ffdada;
+            padding: 11px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .danger-btn:hover {
+            background: #ffe3e3;
+        }
+
+        .message {
+            color: #168BFA;
+            margin-top: 12px;
+            font-size: 14px;
+            display: none;
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .settings-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">Approval Flow</div>
+
+        <a href="agency-dashboard.html">Dashboard</a>
+        <a href="upload.html">Upload Project</a>
+        <a href="approvals.html">Approvals</a>
+        <a href="clients.html">Clients</a>
+        <a href="subscription.html">Subscription</a>
+        <a href="settings.html" class="active">Settings</a>
+        <a href="login.html">Logout</a>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <div class="topbar">
+            <h1>Settings</h1>
+            <div class="profile">Welcome, User 👋</div>
+        </div>
+
+        <div class="intro">
+            <h2>Account Settings</h2>
+            <p>Manage your profile, preferences and account security.</p>
+        </div>
+
+        <!-- Profile Settings -->
+        <section class="settings-card">
+
+            <h2>👤 Profile Information</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName"
+                           placeholder="Enter your name">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email"
+                           placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phone"
+                           placeholder="Enter phone number">
+                </div>
+
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" id="company"
+                           placeholder="Enter company name">
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Password Settings -->
+        <section class="settings-card">
+
+            <h2>🔒 Change Password</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="currentPassword"
+                           placeholder="Current password">
+                </div>
+
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="newPassword"
+                           placeholder="New password">
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Notification Settings -->
+        <section class="settings-card">
+
+            <h2>🔔 Notification Preferences</h2>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Email Notifications</strong>
+                    <p>Receive updates about your projects through email.</p>
+                </div>
+                <input type="checkbox" class="toggle" id="emailNotify" checked>
+            </div>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Project Approval Alerts</strong>
+                    <p>Get notified when a client approves or rejects a project.</p>
+                </div>
+                <input type="checkbox" class="toggle" id="approvalNotify" checked>
+            </div>
+
+            <div class="setting-row">
+                <div>
+                    <strong>Marketing Updates</strong>
+                    <p>Receive news and product updates.</p>
+                </div>
+                <input type="checkbox" class="toggle" id="marketingNotify">
+            </div>
+
+        </section>
+
+        <!-- General Preferences -->
+        <section class="settings-card">
+
+            <h2>⚙️ General Preferences</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Language</label>
+                    <select id="language">
+                        <option>English</option>
+                        <option>Hindi</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Time Zone</label>
+                    <select id="timezone">
+                        <option>India Standard Time (IST)</option>
+                        <option>UTC</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Save Button -->
+        <button class="save-btn" onclick="saveSettings()">
+            Save Changes
+        </button>
+
+        <p class="message" id="successMessage">
+            ✓ Your settings have been saved successfully!
+        </p>
+
+        <!-- Account Management -->
+        <section class="settings-card" style="margin-top:25px;">
+
+            <h2>Account Management</h2>
+
+            <p style="color:#718096; margin-bottom:18px; font-size:14px;">
+                Manage your account and logout from Approval Flow.
+            </p>
+
+            <button class="danger-btn" onclick="logoutUser()">
+                Logout
+            </button>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+
+    function saveSettings() {
+
+        const name = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim();
+
+        if (name === "" || email === "") {
+            alert("Please enter your name and email address.");
+            return;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        const settings = {
+            name: name,
+            email: email,
+            phone: document.getElementById("phone").value,
+            company: document.getElementById("company").value,
+            emailNotify: document.getElementById("emailNotify").checked,
+            approvalNotify: document.getElementById("approvalNotify").checked,
+            marketingNotify: document.getElementById("marketingNotify").checked,
+            language: document.getElementById("language").value,
+            timezone: document.getElementById("timezone").value
+        };
+
+        localStorage.setItem("approvalFlowSettings", JSON.stringify(settings));
+
+        document.getElementById("successMessage").style.display = "block";
+
+    }
+
+    function logoutUser() {
+
+        const confirmLogout = confirm("Are you sure you want to logout?");
+
+        if (confirmLogout) {
+            window.location.href = "login.html";
+        }
+
+    }
+
+    // Load previously saved settings
+    window.onload = function() {
+
+        const savedSettings = localStorage.getItem("approvalFlowSettings");
+
+        if (savedSettings) {
+
+            const settings = JSON.parse(savedSettings);
+
+            document.getElementById("fullName").value = settings.name || "";
+            document.getElementById("email").value = settings.email || "";
+            document.getElementById("phone").value = settings.phone || "";
+            document.getElementById("company").value = settings.company || "";
+
+            document.getElementById("emailNotify").checked = settings.emailNotify;
+            document.getElementById("approvalNotify").checked = settings.approvalNotify;
+            document.getElementById("marketingNotify").checked = settings.marketingNotify;
+
+            document.getElementById("language").value = settings.language || "English";
+            document.getElementById("timezone").value = settings.timezone || "India Standard Time (IST)";
+
+        }
+
+    };
+
+</script>
+
+</body>
+</html>

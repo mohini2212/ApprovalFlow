@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | Approval Flow</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #253247;
+        }
+
+        .navbar {
+            background: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #168BFA;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #526174;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .heading h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #8491a3;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            border: 1px solid #e5eaf0;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 19px;
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dce3eb;
+            border-radius: 7px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            border-color: #168BFA;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #dce3eb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .payment-option:hover {
+            border-color: #168BFA;
+            background: #f4f9ff;
+        }
+
+        .payment-option input {
+            accent-color: #168BFA;
+        }
+
+        .payment-option label {
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            font-size: 14px;
+            color: #78869a;
+        }
+
+        .summary-item strong {
+            color: #253247;
+        }
+
+        .total {
+            border-top: 1px solid #e5eaf0;
+            padding-top: 20px;
+            font-size: 18px;
+            color: #253247;
+            font-weight: bold;
+        }
+
+        .plan-name {
+            color: #168BFA;
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #168BFA;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background: #0874d8;
+        }
+
+        .secure-note {
+            text-align: center;
+            font-size: 12px;
+            color: #8491a3;
+            margin-top: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #168BFA;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #8995a5;
+            font-size: 13px;
+        }
+
+        @media(max-width: 700px) {
+
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">Approval Flow.</div>
+
+        <a href="subscription.html">Back to Plans</a>
+
+    </nav>
+
+
+    <main class="container">
+
+        <a href="subscription.html" class="back-link">
+            ← Back to Subscription
+        </a>
+
+        <div class="heading">
+
+            <h1>Complete Your Payment</h1>
+
+            <p>You're just one step away from getting started!</p>
+
+        </div>
+
+
+        <div class="checkout-grid">
+
+
+            <!-- Customer Details -->
+
+            <div>
+
+                <section class="card">
+
+                    <h2>Customer Information</h2>
+
+                    <form id="paymentForm">
+
+                        <div class="form-group">
+
+                            <label for="name">Full Name</label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                placeholder="Enter your full name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="email">Email Address</label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="Enter your email"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="phone">Mobile Number</label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                placeholder="Enter 10-digit mobile number"
+                                pattern="[0-9]{10}"
+                                maxlength="10"
+                                required
+                            >
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- Payment Method -->
+
+                <section class="card">
+
+                    <h2>Select Payment Method</h2>
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            id="upi"
+                            value="UPI"
+                            checked
+                        >
+
+                        <label for="upi">
+                            UPI / Google Pay / PhonePe
+                        </label>
+
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            id="card"
+                            value="Card"
+                        >
+
+                        <label for="card">
+                            Credit / Debit Card
+                        </label>
+
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            id="netbanking"
+                            value="Net Banking"
+                        >
+
+                        <label for="netbanking">
+                            Net Banking
+                        </label>
+
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            id="wallet"
+                            value="Wallet"
+                        >
+
+                        <label for="wallet">
+                            Wallet
+                        </label>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- Order Summary -->
+
+            <div>
+
+                <section class="card">
+
+                    <h2>Order Summary</h2>
+
+                    <div class="plan-name" id="planName">
+                        Pro Plan
+                    </div>
+
+                    <p style="color:#8491a3;font-size:13px;margin-bottom:25px;">
+                        Monthly Subscription
+                    </p>
+
+
+                    <div class="summary-item">
+
+                        <span>Subscription Amount</span>
+
+                        <strong id="planPrice">₹999</strong>
+
+                    </div>
+
+
+                    <div class="summary-item">
+
+                        <span>GST (18%)</span>
+
+                        <strong id="gst">₹179.82</strong>
+
+                    </div>
+
+
+                    <div class="summary-item total">
+
+                        <span>Total Amount</span>
+
+                        <strong id="total">₹1178.82</strong>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        form="paymentForm"
+                        class="btn"
+                    >
+                        Pay Now
+                    </button>
+
+
+                    <p class="secure-note">
+                        🔒 Secure payment checkout
+                    </p>
+
+                </section>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+    <footer>
+
+        © 2026 Approval Flow. All Rights Reserved.
+
+    </footer>
+
+
+    <script>
+
+        // Get selected plan from Local Storage
+
+        const plan = localStorage.getItem("selectedPlan") || "Pro";
+
+        const amount = Number(
+            localStorage.getItem("selectedAmount") || 999
+        );
+
+
+        // Display subscription details
+
+        document.getElementById("planName").textContent =
+            plan + " Plan";
+
+
+        document.getElementById("planPrice").textContent =
+            "₹" + amount.toFixed(2);
+
+
+        // Calculate GST
+
+        const gst = amount * 0.18;
+
+        const total = amount + gst;
+
+
+        document.getElementById("gst").textContent =
+            "₹" + gst.toFixed(2);
+
+
+        document.getElementById("total").textContent =
+            "₹" + total.toFixed(2);
+
+
+        // Handle payment form
+
+        document.getElementById("paymentForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+                const name = document.getElementById("name").value.trim();
+
+                const email = document.getElementById("email").value.trim();
+
+                const phone = document.getElementById("phone").value.trim();
+
+                const paymentMethod = document.querySelector(
+                    'input[name="payment"]:checked'
+                ).value;
+
+
+                if (!name || !email || !phone) {
+
+                    alert("Please complete all customer details.");
+
+                    return;
+
+                }
+
+
+                if (!/^[0-9]{10}$/.test(phone)) {
+
+                    alert("Please enter a valid 10-digit mobile number.");
+
+                    return;
+
+                }
+
+
+                // Save customer and order information
+
+                localStorage.setItem("customerName", name);
+
+                localStorage.setItem("customerEmail", email);
+
+                localStorage.setItem("customerPhone", phone);
+
+                localStorage.setItem("paymentMethod", paymentMethod);
+
+                localStorage.setItem("paymentAmount", total.toFixed(2));
+
+
+                // DEMO MODE ONLY
+                // Real payment gateway integration is required.
+
+                alert(
+                    "Checkout details saved successfully!\n\n" +
+                    "Selected Plan: " + plan +
+                    "\nTotal: ₹" + total.toFixed(2) +
+                    "\nPayment Method: " + paymentMethod +
+                    "\n\nDemo checkout only. No actual payment has been made."
+                );
+
+            });
+
+    </script>
+
+</body>
+
+</html>
